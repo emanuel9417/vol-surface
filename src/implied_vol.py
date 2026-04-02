@@ -1,3 +1,11 @@
+#class for implied vol
+
+import pandas as pd
+from datetime import datetime
+from scipy.optimize import brentq
+import plotly.express as px
+from src.black_scholes import bs_pricer
+
 class ImpliedVol:
     def __init__(self, option_chain, r, max_iv = 0.5):
         self.option_chain = option_chain
@@ -41,7 +49,7 @@ class ImpliedVol:
         return self
 
     def plot_smile(self):
-        fig = px.line(self.df_strike_iv, x= 'Strike', y = 'IV', title = "Volatility Smile - AAPL", color = 'option_type', markers = True, width = 1000, height = 500)
+        fig = px.line(self.df_strike_iv, x= 'Strike', y = 'IV', title = f"Volatility Smile - {self.option_chain.ticker.ticker}", color = 'option_type', markers = True, template = "plotly_dark", width = 1000, height = 500)
         fig.update_layout(yaxis_tickformat ='.0%')
         fig.add_vline(x = self.spot, annotation_text = "ATM")
-        fig.show()
+        return fig
