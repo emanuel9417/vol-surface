@@ -7,6 +7,27 @@ from src.vol_surface import VolSurface
 st.title("Volatility Surface")
 st.write("Enter the ticker of your choice from Yahoo Finance and click the button to generate the volatility smile and the volatility surface.")
 
+@st.cache_data
+def load_smile(ticker, r, expiry_index=5):
+
+    example_chain = OptionChain(ticker, expiry_index=expiry_index)
+    example_chain.fetch()
+    example_chain.clean()
+
+    example_iv = ImpliedVol(example_chain, r, max_iv=0.5)
+    example_iv.compute_iv()
+    example_iv.build_dataframe()
+
+    return example_iv, example_chain.expiry
+
+@st.cache_data
+def load_surface(ticker, r):
+
+    vs = VolSurface(ticker, r)
+    vs.collect_data()
+    vs.pivot()
+    return vs
+
 col1, col2 = st.columns(2)
 ticker = col1.text_input("Ticker", value = "AAPL")
 r = col2.number_input("Risk-free rate:", min_value = 0.0, value = 0.05, step = 0.05)
@@ -15,20 +36,9 @@ if st.button("Go"):
         
         with st.spinner("In progress", show_time=True):
 
-            vs = VolSurface(ticker, r)
+            iv, expiry = load_smile(ticker, r)
+            st.plotly_chart(iv.plot_smile()) 
+            st.caption(f"Smile example for the following maturity: {expiry}")
 
-            example_chain = OptionChain(ticker, expiry_index=5)
-            example_chain.fetch()
-            example_chain.clean()
-
-            example_iv = ImpliedVol(example_chain, r, max_iv=0.5)
-            example_iv.compute_iv()
-            example_iv.build_dataframe()
-
-            st.write()
-            st.plotly_chart(example_iv.plot_smile())  
-            st.caption(f"Smile example for the following maturity: {example_chain.expiry}")
-
-            vs.collect_data()
-            vs.pivot()  
-            st.plotly_chart(vs.surface_plot())
+            vs = load_surface(ticker, r)
+            st.plotly_chart(vs.surface_plot())            
