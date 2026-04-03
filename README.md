@@ -14,10 +14,10 @@ Financial tool aimed at depicting the volatility surface for the options of a gi
 Python, yfinance, scipy, plotly, streamlit
 
 ## How to Run Locally
-git clone https://github.com/emanuel9417/vol-surface
-cd vol-surface
-pip install -r requirements.txt
-streamlit run app.py
+git clone https://github.com/emanuel9417/vol-surface ;
+cd vol-surface ;
+pip install -r requirements.txt ;
+streamlit run app.py ;
 
 ## Limitations
 The volatility surface isn't as smooth as it should be. This comes from the lack of accuracy of yfinance data. One may achieve better representation using paying APIs such as Refinitiv, CBOE or Bloomberg.
