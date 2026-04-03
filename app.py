@@ -1,4 +1,5 @@
 import streamlit as st
+import yfinance as yf
 from src.black_scholes import bs_pricer
 from src.option_chain import OptionChain
 from src.implied_vol import ImpliedVol
@@ -8,7 +9,10 @@ st.title("Volatility Surface")
 st.write("Enter the ticker of your choice from Yahoo Finance and click the button to generate the volatility smile and the volatility surface.")
 
 @st.cache_resource
-def load_smile(ticker, r, expiry_index=2):
+def load_smile(ticker, r):
+
+    available = yf.Ticker(ticker).options
+    expiry_index = min(5, len(available) - 1)
 
     example_chain = OptionChain(ticker, expiry_index=expiry_index)
     example_chain.fetch()
