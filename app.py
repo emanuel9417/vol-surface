@@ -12,7 +12,11 @@ st.write("Enter the ticker of your choice from Yahoo Finance and click the butto
 def load_smile(ticker, r):
 
     available = yf.Ticker(ticker).options
-    expiry_index = min(5, len(available) - 1)
+    if len(available) == 0:
+        st.error("No options data available for this ticker on Yahoo Finance.")
+        st.stop()
+    else:
+        expiry_index = min(5, len(available) - 1)
 
     example_chain = OptionChain(ticker, expiry_index=expiry_index)
     example_chain.fetch()
