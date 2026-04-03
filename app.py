@@ -7,7 +7,7 @@ from src.vol_surface import VolSurface
 st.title("Volatility Surface")
 st.write("Enter the ticker of your choice from Yahoo Finance and click the button to generate the volatility smile and the volatility surface.")
 
-@st.cache_data
+@st.cache_resource
 def load_smile(ticker, r, expiry_index=5):
 
     example_chain = OptionChain(ticker, expiry_index=expiry_index)
@@ -20,7 +20,7 @@ def load_smile(ticker, r, expiry_index=5):
 
     return example_iv, example_chain.expiry
 
-@st.cache_data
+@st.cache_resource
 def load_surface(ticker, r):
 
     vs = VolSurface(ticker, r)
