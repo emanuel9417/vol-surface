@@ -21,3 +21,4 @@ streamlit run app.py ;
 
 ## Limitations
 The volatility surface isn't as smooth as it should be. This comes from the lack of accuracy of yfinance data. One may achieve better representation using paying APIs such as Refinitiv, CBOE or Bloomberg.
+For now, the tool only works with US-listed stocks that have available options on Yahoo Finance (e.g. AAPL, TSLA...). Once again, one might improve the tool with a paying API.
